@@ -28,13 +28,21 @@ const Guest = styled.div`
 function TodayItem({ activity }) {
   const { id, status, guests, numNights } = activity;
 
+  // Handle case where guests might be null
+  if (!guests) {
+    return null;
+  }
+
   return (
     <StyledTodayItem>
       {status === "unconfirmed" && <Tag type="green">Arriving</Tag>}
       {status === "checked-in" && <Tag type="blue">Departing</Tag>}
 
-      <Flag src={guests.countryFlag} alt={`Flag of ${guests.country}`} />
-      <Guest>{guests.fullName}</Guest>
+      {guests.countryFlag && (
+        <Flag src={guests.countryFlag} alt={`Flag of ${guests.country}`} />
+      )}
+      {!guests.countryFlag && <span></span>}
+      <Guest>{guests.fullName || "Unknown Guest"}</Guest>
       <div>{numNights} nights</div>
 
       {status === "unconfirmed" && (
